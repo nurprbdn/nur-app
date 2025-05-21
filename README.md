@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XRP Earning App</title>
+    <script src='//libtl.com/sdk.js' data-zone='9339387' data-sdk='show_9339387'></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-blue-100 to-purple-100 min-h-screen">
+    
+    <div class="container mx-auto px-4 py-8">
+        <!-- Balance Card -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Your XRP Balance</h2>
+            <div class="flex items-center justify-between">
+                <span class="text-4xl font-bold text-purple-600" id="balance">0</span>
+                <span class="text-xl font-semibold">XRP Tokens</span>
+            </div>
+        </div>
+
+        <!-- Earn Section -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-4">Watch Ads to Earn</h3>
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600">Ads Watched: <span id="adCounter">0</span>/1000</p>
+                    <p class="text-sm text-gray-500">Earn 1 XRP per 1000 ads</p>
+                </div>
+                <button onclick="showAd()" class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors">
+                    Watch Ad Now
+                </button>
+            </div>
+        </div>
+
+        <!-- Withdraw Section -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h3 class="text-xl font-semibold mb-4">Withdraw XRP</h3>
+            <div class="space-y-4">
+                <input type="text" id="walletAddress" placeholder="Enter XRP Wallet Address" class="w-full p-3 border rounded-lg">
+                <input type="number" id="withdrawAmount" placeholder="Amount" class="w-full p-3 border rounded-lg">
+                <button onclick="withdrawXRP()" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors w-full">
+                    Withdraw Now
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let adCount = 0;
+        let xrpBalance = 0;
+
+        function showAd() {
+            // এড শো করার লজিক
+            if(typeof show_9339387 !== 'undefined') {
+                show_9339387();
+                adCount++;
+                
+                // Update counter
+                document.getElementById('adCounter').textContent = adCount;
+                
+                // Check for token earning
+                if(adCount % 1000 === 0) {
+                    xrpBalance++;
+                    updateBalance();
+                    alert('Congratulations! You earned 1 XRP!');
+                }
+            }
+        }
+
+        function updateBalance() {
+            document.getElementById('balance').textContent = xrpBalance;
+        }
+
+        function withdrawXRP() {
+            const walletAddress = document.getElementById('walletAddress').value;
+            const amount = parseInt(document.getElementById('withdrawAmount').value);
+            
+            if(!walletAddress || !amount) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            if(amount > xrpBalance) {
+                alert('Insufficient balance');
+                return;
+            }
+
+            // Withdraw logic here (API call needed)
+            alert(`Withdrawal request for ${amount} XRP to ${walletAddress} submitted!`);
+            xrpBalance -= amount;
+            updateBalance();
+        }
+
+        // Initialization
+        Telegram.WebApp.ready();
+        Telegram.WebApp.expand();
+    </script>
+</body>
+</html>
